@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.UserMapper">
+
+    <insert id="createUser" parameterType="com.entity.User" >
+        INSERT INTO sys_users (username, password, salt, locked) VALUES (#{user.username},#{user.password},#{user.salt},#{user.locked})
+    </insert>
+    <select id="findOne" parameterType="java.lang.Long" resultType="com.entity.User">
+        SELECT * from sys_users WHERE id=#{userId}
+    </select>
+    <select id="findByUsername" parameterType="java.lang.String" resultType="com.entity.User">
+        SELECT * FROM sys_users WHERE username=#{0}
+    </select>
+    <select id="findRoles" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT role FROM sys_users u,sys_roles r,sys_users_roles ur WHERE u.id=ur.user_id and r.id=ur.role_id and u.username=#{0}
+    </select>
+    <select id="findPermissions" parameterType="java.lang.String" resultType="java.lang.String">
+        select permission from sys_users u, sys_roles r, sys_permissions p, sys_users_roles ur, sys_roles_permissions rp where u.username=#{0} and u.id=ur.user_id and r.id=ur.role_id and r.id=rp.role_id and p.id=rp.permission_id
+    </select>
+</mapper>
